@@ -19,17 +19,17 @@ export class Profile {
   @Index()
   id: string;
 
-  @ApiProperty({ example: 'Vladimir', description: 'Firstname' })
+  @ApiProperty({ example: 'Владимир', description: 'Firstname' })
   @Column({ type: 'varchar', length: 70, unique: false, nullable: false })
   @Index()
   firstname: string;
 
-  @ApiProperty({ example: 'Dmitrievich', description: 'Middlename' })
+  @ApiProperty({ example: 'Дмитриевич', description: 'Middlename' })
   @Column({ type: 'varchar', length: 70, unique: false, nullable: true })
   @Index()
   middlename: string;
 
-  @ApiProperty({ example: 'Shustov', description: 'Lastname' })
+  @ApiProperty({ example: 'Шустов', description: 'Lastname' })
   @Column({ type: 'varchar', length: 70, unique: false, nullable: false })
   @Index()
   lastname: string;
