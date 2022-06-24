@@ -2,7 +2,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class DriverLicenses {
+export class DriverLicense {
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614174000',
     description: 'Unique identifier',
@@ -53,7 +53,7 @@ export class DriverLicenses {
 
   @ApiProperty({ example: `['A', 'B']`, description: `Array of categories` })
   @Column({
-    type: 'jsonb',
+    type: 'json',
   })
   categories: string[];
 
