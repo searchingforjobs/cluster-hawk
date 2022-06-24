@@ -5,6 +5,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   UpdateDateColumn,
 } from 'typeorm';
@@ -12,6 +13,7 @@ import { Institution } from './institution.entity';
 import { BirthCertificate } from './birth-certificate.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender } from '../interfaces/genders.interface';
+import { Attendee } from './attendee.entity';
 
 @Entity()
 export class Student {
@@ -77,4 +79,7 @@ export class Student {
   })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Attendee, (attendee) => attendee.students)
+  attendee: Attendee;
 }

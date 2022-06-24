@@ -2,15 +2,17 @@ import {
   Column,
   Entity,
   Index,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { DriverLicense } from './driver-licenses.entity';
+import { DriverLicense } from './driver-license.entity';
 import { Profile } from './profile.entity';
 import { User } from '../modules/users/entities/user.entity';
 import { Passport } from './passport.entity';
 import { AttendeeStatus } from '../interfaces/attendee-status.interface';
+import { Student } from './student.entity';
 
 @Entity()
 export class Attendee {
@@ -56,4 +58,7 @@ export class Attendee {
   })
   @Index()
   status: AttendeeStatus;
+
+  @OneToMany(() => Student, (student) => student.attendee)
+  students: Student[];
 }
