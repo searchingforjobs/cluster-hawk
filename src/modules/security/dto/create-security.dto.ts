@@ -5,7 +5,8 @@ export class CreateSecurityDto {
   @ApiProperty({
     description: 'Profile uuid',
   })
-  profileId: string;
+  @IsOptional()
+  profileId?: string;
 
   @ApiProperty({
     description: 'User uuid',
@@ -18,7 +19,8 @@ export class CreateSecurityDto {
     description: 'Institution uuid',
   })
   @IsUUID()
-  institutionId: string;
+  @IsOptional()
+  institutionId?: string;
 
   @ApiProperty({
     description: 'Admission date',

@@ -1,26 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentDto } from './dto/update-incident.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { S3Service } from '../s3/s3.service';
+import { Incident } from '../../entities/incident.entity';
+import { SecurityService } from '../security/security.service';
 
 @Injectable()
 export class IncidentsService {
-  create(createIncidentDto: CreateIncidentDto) {
-    return 'This action adds a new incident';
+  constructor(
+    @InjectRepository(Incident)
+    private readonly incidentsRepository: Repository<Incident>,
+    private readonly securityService: SecurityService,
+    private readonly s3Service: S3Service,
+  ) {}
+
+  async create(createIncidentDto: CreateIncidentDto, image: Buffer) {
+    const imageUrl = (await this.s3Service.upload(image))['Location'];
+    const security = await this.securityService.findOne(
+      createIncidentDto.securityId,
+    );
+    const incident = await this.incidentsRepository.create(createIncidentDto);
+    incident.security = security;
+    incident.photoUrl = imageUrl;
+    return await this.incidentsRepository.save(incident);
   }
 
-  findAll() {
-    return `This action returns all incidents`;
+  async findAll() {
+    const incidents = await this.incidentsRepository.find();
+    return incidents;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} incident`;
+  async findOne(id: string) {
+    const incident = await this.incidentsRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return incident;
   }
 
-  update(id: number, updateIncidentDto: UpdateIncidentDto) {
-    return `This action updates a #${id} incident`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} incident`;
+  async update(id: string, updateIncidentDto: UpdateIncidentDto) {
+    const updateResult = await this.incidentsRepository.update(
+      id,
+      updateIncidentDto,
+    );
+    return updateResult;
   }
 }

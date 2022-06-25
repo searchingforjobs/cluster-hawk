@@ -33,7 +33,7 @@ export class PassportService {
   }
 
   async findOne(id: string) {
-    const passports = await this.passportsRepository.find({
+    const passports = await this.passportsRepository.findOne({
       where: {
         id: id,
       },

@@ -15,7 +15,6 @@ import { PassportService } from './passport.service';
 import { CreatePassportDto } from './dto/create-passport.dto';
 import { UpdatePassportDto } from './dto/update-passport.dto';
 import {
-  ApiBody,
   ApiConsumes,
   ApiOperation,
   ApiResponse,
@@ -61,7 +60,7 @@ export class PassportController {
   @ApiOperation({ summary: 'Get one' })
   @ApiResponse({
     status: 200,
-    type: [Passport],
+    type: Passport,
   })
   findOne(@Param('id') id: string) {
     return this.passportService.findOne(id);
