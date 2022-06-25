@@ -38,6 +38,9 @@ import { SecurityProfile } from './entities/security-profile.entity';
 import { Student } from './entities/student.entity';
 import { Visit } from './entities/visit.entity';
 import { ProfilesModule } from './modules/profiles/profiles.module';
+import { PassportModule } from './modules/passports/passport.module';
+import { DriverLicenseModule } from './modules/driver-licenses/driver-license.module';
+import { BirthCertificateModule } from './modules/birth-certificates/birth-certificate.module';
 
 @Module({
   controllers: [],
@@ -95,6 +98,9 @@ import { ProfilesModule } from './modules/profiles/profiles.module';
     FaceRecognitionModule,
     S3Module,
     ProfilesModule,
+    PassportModule,
+    DriverLicenseModule,
+    BirthCertificateModule,
   ],
 })
 export class AppModule {
