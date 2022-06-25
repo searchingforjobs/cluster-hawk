@@ -20,18 +20,29 @@ export class InstitutionsService {
   }
 
   async findAll() {
-    return `This action returns all institutions`;
+    const institutions = await this.institutionsRepository.find();
+    return institutions;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} institution`;
+  async findOne(id: string) {
+    const institutions = await this.institutionsRepository.find({
+      where: {
+        id: id,
+      },
+    });
+    return institutions;
   }
 
-  async update(id: number, updateInstitutionDto: UpdateInstitutionDto) {
-    return `This action updates a #${id} institution`;
+  async update(id: string, updateInstitutionDto: UpdateInstitutionDto) {
+    const institutions = await this.institutionsRepository.update(
+      id,
+      updateInstitutionDto,
+    );
+    return institutions;
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} institution`;
+  async remove(id: string) {
+    const institutions = await this.institutionsRepository.delete(id);
+    return institutions;
   }
 }
