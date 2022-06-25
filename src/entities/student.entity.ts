@@ -26,12 +26,23 @@ export class Student {
   @Index()
   id: string;
 
-  @ManyToOne(() => Institution)
+  @ManyToOne(() => Institution, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'institutionId' })
   institution: Institution;
 
-  @OneToOne(() => BirthCertificate)
-  @JoinColumn()
+  @Column({ nullable: true })
+  institutionId: string;
+
+  @OneToOne(() => BirthCertificate, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'birthCertificateId' })
   birthCertificate: BirthCertificate;
+
+  @Column({ nullable: true })
+  birthCertificateId: string;
 
   @ApiProperty({
     description: 'Admissed at date',
