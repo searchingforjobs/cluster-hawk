@@ -25,7 +25,7 @@ export class InstitutionsService {
   }
 
   async findOne(id: string) {
-    const institutions = await this.institutionsRepository.find({
+    const institutions = await this.institutionsRepository.findOne({
       where: {
         id: id,
       },

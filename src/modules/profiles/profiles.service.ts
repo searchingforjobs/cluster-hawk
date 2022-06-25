@@ -22,7 +22,7 @@ export class ProfilesService {
   }
 
   async findOne(id: string) {
-    const profiles = await this.eventsRepository.find({
+    const profiles = await this.eventsRepository.findOne({
       where: {
         id: id,
       },
