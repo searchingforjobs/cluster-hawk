@@ -1,4 +1,9 @@
-import { Controller, Get, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FaceRecognitionService } from './face-recognition.service';
 import {
   ApiConsumes,
@@ -17,7 +22,7 @@ export class FaceRecognitionController {
     private readonly faceRecognitionService: FaceRecognitionService,
   ) {}
 
-  @Get()
+  @Post()
   @ApiOperation({ summary: 'Get nearest attendees by photo' })
   @ApiResponse({
     status: 200,

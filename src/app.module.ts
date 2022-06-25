@@ -42,6 +42,7 @@ import { PassportModule } from './modules/passports/passport.module';
 import { DriverLicenseModule } from './modules/driver-licenses/driver-license.module';
 import { BirthCertificateModule } from './modules/birth-certificates/birth-certificate.module';
 import { Incident } from './entities/incident.entity';
+import { EmbeddingsModule } from './modules/embeddings/embeddings.module';
 
 @Module({
   controllers: [],
@@ -79,7 +80,7 @@ import { Incident } from './entities/incident.entity';
         Incident,
       ],
       synchronize: true,
-      dropSchema: true,
+      // dropSchema: true,
       ssl: {
         rejectUnauthorized: false,
         cert: fs.readFileSync(process.env.SSL_CERT).toString(),
@@ -103,6 +104,7 @@ import { Incident } from './entities/incident.entity';
     PassportModule,
     DriverLicenseModule,
     BirthCertificateModule,
+    EmbeddingsModule,
   ],
 })
 export class AppModule {
