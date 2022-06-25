@@ -1,26 +1,116 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 import { UpdateAttendeeDto } from './dto/update-attendee.dto';
+import { S3Service } from '../s3/s3.service';
+import { ApiException } from '../../shared/exceptions/api.exception';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Attendee } from '../../entities/attendee.entity';
+import { User } from '../users/entities/user.entity';
+import { Profile } from '../../entities/profile.entity';
+import { Passport } from '../../entities/passport.entity';
+import { DriverLicense } from '../../entities/driver-license.entity';
 
 @Injectable()
 export class AttendeesService {
-  create(createAttendeeDto: CreateAttendeeDto) {
-    return 'This action adds a new attendee';
+  constructor(
+    @InjectRepository(Attendee)
+    private readonly attendeesRepository: Repository<Attendee>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
+    @InjectRepository(Passport)
+    private readonly passportsRepository: Repository<Passport>,
+    @InjectRepository(DriverLicense)
+    private readonly driverLicensesRepository: Repository<DriverLicense>,
+    private readonly s3Service: S3Service,
+  ) {}
+
+  async create(dto: CreateAttendeeDto, image: Buffer) {
+    const imageUrl = (await this.s3Service.upload(image))['Location'];
+    if (imageUrl) {
+      const attendee = await this.attendeesRepository.create({
+        contactPhone: dto.contactPhone,
+        photoUrl: imageUrl,
+        //TODO: compute embeddings
+        embedding: [],
+      });
+
+      if (dto.userId) {
+        attendee.user = await this.usersRepository.findOne({
+          where: {
+            id: dto.userId,
+          },
+        });
+      }
+
+      if (dto.profileId) {
+        attendee.profile = await this.profileRepository.findOne({
+          where: {
+            id: dto.profileId,
+          },
+        });
+      }
+
+      if (dto.driverLicenseId) {
+        attendee.driverLicense = await this.driverLicensesRepository.findOne({
+          where: {
+            id: dto.driverLicenseId,
+          },
+        });
+      }
+
+      if (dto.passportId) {
+        attendee.passport = await this.passportsRepository.findOne({
+          where: {
+            id: dto.passportId,
+          },
+        });
+      }
+
+      return await this.attendeesRepository.save(attendee);
+    }
+    throw ApiException.BadRequest();
   }
 
-  findAll() {
-    return `This action returns all attendees`;
+  async findAll() {
+    const attendees = await this.attendeesRepository.find({
+      relations: {
+        user: true,
+        profile: true,
+        passport: true,
+        driverLicense: true,
+      },
+    });
+    return attendees;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} attendee`;
+  async findOne(id: string) {
+    const attendee = await this.attendeesRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        user: true,
+        profile: true,
+        passport: true,
+        driverLicense: true,
+      },
+    });
+    return attendee;
   }
 
-  update(id: number, updateAttendeeDto: UpdateAttendeeDto) {
-    return `This action updates a #${id} attendee`;
+  async update(id: string, updateAttendeeDto: UpdateAttendeeDto) {
+    const updateResult = await this.attendeesRepository.update(
+      id,
+      updateAttendeeDto,
+    );
+    return updateResult;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} attendee`;
+  async remove(id: string) {
+    const deleteResult = await this.attendeesRepository.delete(id);
+    return deleteResult;
   }
 }

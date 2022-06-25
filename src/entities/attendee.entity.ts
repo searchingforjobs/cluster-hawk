@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -24,17 +25,33 @@ export class Attendee {
   @Index()
   id: string;
 
-  @OneToOne(() => DriverLicense)
+  @OneToOne(() => DriverLicense, { cascade: true })
+  @JoinColumn({ name: 'driverLicenseId' })
   driverLicense: DriverLicense;
 
-  @OneToOne(() => Profile)
+  @Column({ nullable: true })
+  driverLicenseId: string;
+
+  @OneToOne(() => Profile, { cascade: true })
+  @JoinColumn({ name: 'profileId' })
   profile: Profile;
 
-  @OneToOne(() => User)
+  @Column({ nullable: true })
+  profileId: string;
+
+  @OneToOne(() => User, { cascade: true })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  @OneToOne(() => Passport)
+  @Column({ nullable: true })
+  userId: string;
+
+  @OneToOne(() => Passport, { cascade: true })
+  @JoinColumn({ name: 'passportId' })
   passport: Passport;
+
+  @Column({ nullable: true })
+  passportId: string;
 
   @ApiProperty({ description: `Photo url` })
   @Column({ type: 'varchar', nullable: false })

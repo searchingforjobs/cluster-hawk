@@ -1,13 +1,13 @@
 run:
-	docker run -p 80:5000 --name nesttemplate shuimi/nest-template
+	docker run -p 80:5000 --name clusterhawk shuimi/cluster-hawk
 build:
-	docker build -t shuimi/nest-template ./docker/prod
+	docker build -t shuimi/cluster-hawk .
 push:
-	docker push shuimi/nest-template
+	docker push shuimi/cluster-hawk
 rm:
-	docker rm nesttemplate
+	docker rm clusterhawk
 stop:
-	docker stop nesttemplate
+	docker stop clusterhawk
 up:
 	docker-compose up --build
 cleanup:
