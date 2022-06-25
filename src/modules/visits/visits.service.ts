@@ -1,26 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVisitDto } from './dto/create-visit.dto';
-import { UpdateVisitDto } from './dto/update-visit.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Visit } from '../../entities/visit.entity';
+import { Attendee } from '../../entities/attendee.entity';
+import { SecurityProfile } from '../../entities/security-profile.entity';
 
 @Injectable()
 export class VisitsService {
-  create(createVisitDto: CreateVisitDto) {
-    return 'This action adds a new visit';
+  constructor(
+    @InjectRepository(Visit)
+    private readonly visitsRepository: Repository<Visit>,
+    @InjectRepository(SecurityProfile)
+    private readonly securityRepository: Repository<SecurityProfile>,
+    @InjectRepository(Attendee)
+    private readonly attendeesRepository: Repository<Attendee>,
+  ) {}
+
+  async create(createVisitDto: CreateVisitDto) {
+    const securityProfile = await this.securityRepository.findOne({
+      where: {
+        id: createVisitDto.securityId,
+      },
+    });
+    const attendee = await this.attendeesRepository.findOne({
+      where: {
+        id: createVisitDto.attendeeId,
+      },
+    });
+    const visit = await this.visitsRepository.create();
+    visit.security = securityProfile;
+    visit.attendee = attendee;
+    return await this.visitsRepository.save(visit);
   }
 
-  findAll() {
-    return `This action returns all visits`;
+  async findAll() {
+    const visits = await this.visitsRepository.find({
+      relations: {
+        attendee: true,
+        security: true,
+      },
+    });
+    return visits;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} visit`;
-  }
-
-  update(id: number, updateVisitDto: UpdateVisitDto) {
-    return `This action updates a #${id} visit`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} visit`;
+  async findOne(id: string) {
+    const passports = await this.visitsRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        attendee: true,
+        security: true,
+      },
+    });
+    return passports;
   }
 }

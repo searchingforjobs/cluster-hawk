@@ -1,7 +1,9 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,11 +21,25 @@ export class Visit {
   @Index()
   id: string;
 
-  @ManyToOne(() => SecurityProfile)
+  @ManyToOne(() => SecurityProfile, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn({ name: 'securityId' })
   security: SecurityProfile;
 
-  @ManyToOne(() => SecurityProfile)
+  @Column({ nullable: true, default: null })
+  securityId: string;
+
+  @ManyToOne(() => SecurityProfile, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn({ name: 'attendeeId' })
   attendee: Attendee;
+
+  @Column({ nullable: true, default: null })
+  attendeeId: string;
 
   @ApiProperty({
     description: 'Creation timestamp',

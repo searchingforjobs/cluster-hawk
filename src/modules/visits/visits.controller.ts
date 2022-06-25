@@ -3,40 +3,48 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { VisitsService } from './visits.service';
 import { CreateVisitDto } from './dto/create-visit.dto';
-import { UpdateVisitDto } from './dto/update-visit.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Visit } from '../../entities/visit.entity';
 
+@ApiTags('Visits')
 @Controller('visits')
 export class VisitsController {
   constructor(private readonly visitsService: VisitsService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
+  @ApiOperation({ summary: 'Create new one' })
+  @ApiResponse({
+    status: 200,
+    type: Visit,
+  })
   create(@Body() createVisitDto: CreateVisitDto) {
     return this.visitsService.create(createVisitDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all' })
+  @ApiResponse({
+    status: 200,
+    type: [Visit],
+  })
   findAll() {
     return this.visitsService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get one' })
+  @ApiResponse({
+    status: 200,
+    type: Visit,
+  })
   findOne(@Param('id') id: string) {
-    return this.visitsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVisitDto: UpdateVisitDto) {
-    return this.visitsService.update(+id, updateVisitDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.visitsService.remove(+id);
+    return this.visitsService.findOne(id);
   }
 }
