@@ -40,6 +40,10 @@ export class Attendee {
   @Column({ type: 'varchar', nullable: false })
   photoUrl: string;
 
+  @ApiProperty({ example: '88005553535', description: `Contact phone` })
+  @Column({ type: 'varchar', nullable: false })
+  contactPhone: string;
+
   @ApiProperty({ example: `['A', 'B']`, description: `Array of categories` })
   @Column({
     type: 'json',

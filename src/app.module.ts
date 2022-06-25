@@ -24,6 +24,7 @@ import { StudentsModule } from './modules/students/students.module';
 import { ManagersModule } from './modules/managers/managers.module';
 import { EventsModule } from './modules/events/events.module';
 import { FaceRecognitionModule } from './modules/face-recognition/face-recognition.module';
+import { S3Module } from './modules/s3/s3.module';
 import * as fs from 'fs';
 
 @Module({
@@ -69,6 +70,7 @@ import * as fs from 'fs';
     ManagersModule,
     EventsModule,
     FaceRecognitionModule,
+    S3Module,
   ],
 })
 export class AppModule {
