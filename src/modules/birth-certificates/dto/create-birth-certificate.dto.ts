@@ -1,113 +1,117 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Gender } from '../interfaces/genders.interface';
+import { Gender } from '../../../interfaces/genders.interface';
+import {
+  IsBooleanString,
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
-@Entity()
-export class BirthCertificate {
-  @ApiProperty({
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    description: 'Unique identifier',
-  })
-  @PrimaryGeneratedColumn('uuid')
-  @Index()
-  id: string;
-
+export class CreateBirthCertificateDto {
   @ApiProperty({ example: '496', description: 'Birth record number' })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   birthRecordNumber: string;
 
   @ApiProperty({
     example: 'Отдел ЗАГС Советского р-на г. Москвы',
     description: 'State registration place',
   })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   stateRegistrationPlace: string;
 
   @ApiProperty({ example: 'Иван', description: `Father's firstname` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   fatherFirstname: string;
 
   @ApiProperty({ example: 'Иванов', description: `Father's lastname` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   fatherLastname: string;
 
   @ApiProperty({ example: 'Иванович', description: `Father's middlename` })
-  @Column({ type: 'varchar', nullable: true })
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   fatherMiddlename: string;
 
   @ApiProperty({ example: 'Русский', description: `Father's nationality` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   fatherNationality: string;
 
   @ApiProperty({ example: 'Анна', description: `Mother's firstname` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   motherFirstname: string;
 
   @ApiProperty({ example: 'Иванова', description: `Mother's lastname` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   motherLastname: string;
 
   @ApiProperty({ example: 'Ивановна', description: `Mother's middlename` })
-  @Column({ type: 'varchar', nullable: true })
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   motherMiddlename: string;
 
   @ApiProperty({ example: 'Русская', description: `Mother's nationality` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   motherNationality: string;
 
   @ApiProperty({
     description: 'Issue date',
   })
-  @Column({ type: 'timestamptz', nullable: false, default: () => 'NOW()' })
+  @IsDateString()
   issuedAt: Date;
 
   @ApiProperty({ example: 'I-CH №000000', description: `Document's id` })
-  @Column({ type: 'varchar', nullable: false })
+  @IsString()
+  @IsNotEmpty()
   documentId: string;
 
   @ApiProperty({ example: 'false', description: `Show that signature exist` })
-  @Column({ type: 'bool', default: false })
+  @IsBooleanString()
+  @IsNotEmpty()
   signature: boolean;
 
   @ApiProperty({ example: 'Владимир', description: 'Firstname' })
-  @Column({ type: 'varchar', length: 70, unique: false, nullable: false })
-  @Index()
+  @IsString()
+  @IsNotEmpty()
   firstname: string;
 
   @ApiProperty({ example: 'Дмитриевич', description: 'Middlename' })
-  @Column({ type: 'varchar', length: 70, unique: false, nullable: true })
-  @Index()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   middlename: string;
 
   @ApiProperty({ example: 'Шустов', description: 'Lastname' })
-  @Column({ type: 'varchar', length: 70, unique: false, nullable: false })
-  @Index()
+  @IsString()
+  @IsNotEmpty()
   lastname: string;
 
   @ApiProperty({
     description: 'Birthdate',
   })
-  @Column({ type: 'timestamptz', nullable: false, default: () => 'NOW()' })
+  @IsDateString()
   birthdate: Date;
 
   @ApiProperty({
     example: 'Мужчина',
     description: 'Gender (Мужчина, Женщина, Не указано)',
   })
-  @Column({
-    type: 'enum',
-    enum: Gender,
-    default: Gender.NOT_SPECIFIED,
-    nullable: false,
-  })
-  @Index()
+  @IsEnum(Gender)
   gender: Gender;
 
   @ApiProperty({ example: 'г. Краснодар', description: 'Locality' })
-  @Column({ type: 'varchar', unique: false, nullable: false })
+  @IsString()
+  @IsNotEmpty()
   placeOfBirth: string;
-
-  @ApiProperty({ description: 'Document scan link' })
-  @Column({ type: 'varchar', unique: false, nullable: false })
-  scanLink: string;
 }
