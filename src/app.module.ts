@@ -41,6 +41,7 @@ import { ProfilesModule } from './modules/profiles/profiles.module';
 import { PassportModule } from './modules/passports/passport.module';
 import { DriverLicenseModule } from './modules/driver-licenses/driver-license.module';
 import { BirthCertificateModule } from './modules/birth-certificates/birth-certificate.module';
+import { Incident } from './entities/incident.entity';
 
 @Module({
   controllers: [],
@@ -75,6 +76,7 @@ import { BirthCertificateModule } from './modules/birth-certificates/birth-certi
         SecurityProfile,
         Student,
         Visit,
+        Incident,
       ],
       synchronize: true,
       dropSchema: true,
