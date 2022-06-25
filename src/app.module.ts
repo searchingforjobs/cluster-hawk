@@ -37,6 +37,7 @@ import { Profile } from './entities/profile.entity';
 import { SecurityProfile } from './entities/security-profile.entity';
 import { Student } from './entities/student.entity';
 import { Visit } from './entities/visit.entity';
+import { ProfilesModule } from './modules/profiles/profiles.module';
 
 @Module({
   controllers: [],
@@ -93,6 +94,7 @@ import { Visit } from './entities/visit.entity';
     EventsModule,
     FaceRecognitionModule,
     S3Module,
+    ProfilesModule,
   ],
 })
 export class AppModule {
