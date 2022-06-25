@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -20,14 +21,32 @@ export class ManagerProfile {
   @Index()
   id: string;
 
-  @OneToOne(() => Profile)
+  @OneToOne(() => Profile, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'profileId' })
   profile: Profile;
 
-  @OneToOne(() => User)
+  @Column({ nullable: true })
+  profileId: string;
+
+  @OneToOne(() => User, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  @OneToOne(() => Institution)
+  @Column({ nullable: true })
+  userId: string;
+
+  @OneToOne(() => Institution, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'institutionId' })
   institution: Institution;
+
+  @Column({ nullable: true })
+  institutionId: string;
 
   @ApiProperty({
     example: 'Завуч по воспитательной работе',
