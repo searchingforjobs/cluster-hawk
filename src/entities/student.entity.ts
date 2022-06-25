@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Institution } from './institution.entity';
@@ -17,6 +18,14 @@ import { Attendee } from './attendee.entity';
 
 @Entity()
 export class Student {
+  @ApiProperty({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Unique identifier',
+  })
+  @PrimaryGeneratedColumn('uuid')
+  @Index()
+  id: string;
+
   @ManyToOne(() => Institution)
   institution: Institution;
 

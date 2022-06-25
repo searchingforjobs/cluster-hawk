@@ -26,6 +26,17 @@ import { EventsModule } from './modules/events/events.module';
 import { FaceRecognitionModule } from './modules/face-recognition/face-recognition.module';
 import { S3Module } from './modules/s3/s3.module';
 import * as fs from 'fs';
+import { Attendee } from './entities/attendee.entity';
+import { BirthCertificate } from './entities/birth-certificate.entity';
+import { DriverLicense } from './entities/driver-license.entity';
+import { Event } from './entities/event.entity';
+import { Institution } from './entities/institution.entity';
+import { ManagerProfile } from './entities/manager-profile.entity';
+import { Passport } from './entities/passport.entity';
+import { Profile } from './entities/profile.entity';
+import { SecurityProfile } from './entities/security-profile.entity';
+import { Student } from './entities/student.entity';
+import { Visit } from './entities/visit.entity';
 
 @Module({
   controllers: [],
@@ -49,6 +60,17 @@ import * as fs from 'fs';
         PasswordChangeCase,
         UsernameChangeCase,
         SessionRefreshToken,
+        Attendee,
+        BirthCertificate,
+        DriverLicense,
+        Event,
+        Institution,
+        ManagerProfile,
+        Passport,
+        Profile,
+        SecurityProfile,
+        Student,
+        Visit,
       ],
       synchronize: true,
       dropSchema: true,
