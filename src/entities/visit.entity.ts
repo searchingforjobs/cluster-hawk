@@ -31,7 +31,7 @@ export class Visit {
   @Column({ nullable: true, default: null })
   securityId: string;
 
-  @ManyToOne(() => SecurityProfile, {
+  @ManyToOne(() => Attendee, {
     cascade: true,
     nullable: true,
   })

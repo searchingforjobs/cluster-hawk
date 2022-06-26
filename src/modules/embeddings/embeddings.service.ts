@@ -3,7 +3,6 @@ import { Embedding } from './interfaces/embedding.interface';
 import { ApiException } from '../../shared/exceptions/api.exception';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { EmbeddingsServiceResponse } from './interfaces/embeddings-service-response.interface';
 import { lastValueFrom } from 'rxjs';
 import { EmbeddingsDistanceReport } from './interfaces/report.interface';
 
@@ -26,17 +25,23 @@ export class EmbeddingsService {
   }
 
   private euclideanNorm(vector: Embedding) {
-    const sum = vector.reduce((x, aggregate) => aggregate + x * x, 0);
+    let sum = 0.0;
+    for (let i = 0; i < vector.length; i++) {
+      sum += vector[i] * vector[i];
+    }
     return Math.sqrt(sum);
   }
 
   cosineDistance(vector: Embedding, another: Embedding) {
     if (vector.length != another.length) {
-      throw ApiException.InternalServerError('Invalid embeddings');
+      throw ApiException.InternalServerError(
+        `Invalid embeddings: ${vector.length}, ${another.length}`,
+      );
     }
     let sum = 0.0;
     for (let i = 0; i < vector.length; i++) {
       sum += vector[i] * another[i];
+      console.log(sum);
     }
     return sum / (this.euclideanNorm(vector) * this.euclideanNorm(another));
   }
@@ -73,10 +78,13 @@ export class EmbeddingsService {
 
   async getEmbeddingsByPhotoUrl(photoUrl: string) {
     const response = await lastValueFrom(
-      this.httpService.post<EmbeddingsServiceResponse>(this.embeddingEndpoint, {
-        link: photoUrl,
+      this.httpService.get(this.embeddingEndpoint, {
+        data: {
+          link: photoUrl,
+        },
       }),
     );
+    console.log(response);
     if (response) {
       const embedding = response.data;
       if (!embedding) {

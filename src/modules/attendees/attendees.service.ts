@@ -10,6 +10,7 @@ import { User } from '../users/entities/user.entity';
 import { Profile } from '../../entities/profile.entity';
 import { Passport } from '../../entities/passport.entity';
 import { DriverLicense } from '../../entities/driver-license.entity';
+import { EmbeddingsService } from '../embeddings/embeddings.service';
 
 @Injectable()
 export class AttendeesService {
@@ -25,16 +26,26 @@ export class AttendeesService {
     @InjectRepository(DriverLicense)
     private readonly driverLicensesRepository: Repository<DriverLicense>,
     private readonly s3Service: S3Service,
+    private readonly embeddingsService: EmbeddingsService,
   ) {}
 
   async create(dto: CreateAttendeeDto, image: Buffer) {
     const imageUrl = (await this.s3Service.upload(image))['Location'];
     if (imageUrl) {
+      const embeddings = (
+        await this.embeddingsService.getEmbeddingsByPhotoUrl(imageUrl)
+      )['descriptor'];
+
+      const embedding = [];
+
+      for (const [, value] of Object.entries(embeddings)) {
+        embedding.push(value);
+      }
+
       const attendee = await this.attendeesRepository.create({
         contactPhone: dto.contactPhone,
         photoUrl: imageUrl,
-        //TODO: compute embeddings
-        embedding: [],
+        embedding: embedding,
       });
 
       if (dto.userId) {

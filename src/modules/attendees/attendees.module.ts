@@ -8,10 +8,13 @@ import { Passport } from '../../entities/passport.entity';
 import { DriverLicense } from '../../entities/driver-license.entity';
 import { Profile } from '../../entities/profile.entity';
 import { User } from '../users/entities/user.entity';
+import { EmbeddingsService } from '../embeddings/embeddings.service';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AttendeesController],
-  providers: [AttendeesService, S3Service],
+  providers: [AttendeesService, S3Service, EmbeddingsService, ConfigService],
   imports: [
     TypeOrmModule.forFeature([
       Attendee,
@@ -20,6 +23,7 @@ import { User } from '../users/entities/user.entity';
       Passport,
       DriverLicense,
     ]),
+    HttpModule,
   ],
 })
 export class AttendeesModule {}
