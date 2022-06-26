@@ -41,6 +41,7 @@ export class FaceRecognitionService {
       const candidateScores = [];
 
       let exactMatch = null;
+      let exactMatchDistance = null;
 
       attendees.forEach((attendee) => {
         if (attendee.embedding && attendee.embedding.length != 0) {
@@ -53,6 +54,7 @@ export class FaceRecognitionService {
 
           if (this.embeddingsService.interpretCosine(distance)) {
             exactMatch = attendee;
+            exactMatchDistance = distance;
             return;
           }
 
@@ -64,7 +66,15 @@ export class FaceRecognitionService {
         }
       });
 
-      if (exactMatch) return [exactMatch];
+      if (exactMatch)
+        return [
+          {
+            attendee: exactMatch,
+            distance: exactMatchDistance,
+            interpretation:
+              this.embeddingsService.interpretCosine(exactMatchDistance),
+          },
+        ];
       else {
         return candidateScores
           .sort((a, b) => a.distance - b.distance)
